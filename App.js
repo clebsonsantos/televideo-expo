@@ -1,21 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import * as ScreenOrientation from 'expo-screen-orientation';
+import {StatusBar} from 'react-native'
 
+import { DeviceMotion } from 'expo-sensors';
+import AppStack from './routes/AppStack';
 export default function App() {
+
+  const [ativo, setAtivo] = React.useState({});
+
+   DeviceMotion.isAvailableAsync().then(response => setAtivo(() => response))
+   if(ativo){
+     async function changeScreenOrientation() {
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.ALL);
+    }
+    changeScreenOrientation()
+
+   }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <StatusBar barStyle={'default'} backgroundColor='#000' hidden={true}/>
+      <AppStack/>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
